@@ -1,0 +1,120 @@
+/* Home.css */
+.home-section {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 40px 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+  gap: 60px;
+}
+
+.home-left {
+  flex: 1;
+  max-width: 500px;
+}
+
+.home-title {
+  font-size: 48px;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 20px;
+  line-height: 1.2;
+}
+
+.home-subtitle {
+  font-size: 18px;
+  color: #666;
+  margin-bottom: 30px;
+  line-height: 1.5;
+}
+
+.home-button {
+  background-color: #213547;
+  color: white;
+  border: none;
+  padding: 12px 24px;
+  font-size: 16px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  font-weight: 500;
+}
+
+.home-button:hover {
+  background-color: #2c4860;
+}
+
+.home-right {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.home-image {
+  max-width: 100%;
+  height: auto;
+  border-radius: 12px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+}
+
+.recipes-section {
+  padding: 40px 0;
+  background-color: #f8f9fa;
+}
+
+.recipes-title {
+  text-align: center;
+  font-size: 36px;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 40px;
+}
+
+/* Responsive design */
+@media (max-width: 968px) {
+  .home-section {
+    flex-direction: column;
+    gap: 40px;
+    text-align: center;
+  }
+
+  .home-title {
+    font-size: 36px;
+  }
+
+  .home-subtitle {
+    font-size: 16px;
+  }
+}
+
+@media (max-width: 768px) {
+  .home-section {
+    padding: 20px;
+    gap: 30px;
+  }
+
+  .home-title {
+    font-size: 32px;
+  }
+
+  .home-subtitle {
+    font-size: 14px;
+  }
+
+  .recipes-title {
+    font-size: 28px;
+  }
+}
+
+@media (max-width: 480px) {
+  .home-title {
+    font-size: 24px;
+  }
+
+  .home-button {
+    width: 100%;
+    padding: 14px;
+  }
+}
