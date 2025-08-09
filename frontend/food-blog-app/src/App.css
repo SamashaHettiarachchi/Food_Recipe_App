@@ -1,10 +1,14 @@
-@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
 
 * {
   padding: 0;
   margin: 0;
   box-sizing: border-box;
   font-family: "Poppins", sans-serif;
+}
+
+body {
+  padding-top: 80px; /* Add space for fixed header */
 }
 
 header {
@@ -14,12 +18,12 @@ header {
   align-items: center;
   box-shadow: 1px 0 5px rgba(0, 0, 0, 0.2);
   position: fixed;
-  top:0;
+  top: 0;
   z-index: 10;
   background-color: #ffffff;
 }
 
-header ul{
+header ul {
   width: 40%;
   height: 50px;
   display: flex;
@@ -27,112 +31,112 @@ header ul{
   align-items: center;
 }
 
-header ul li{
+header ul li {
   list-style: none;
   cursor: pointer;
 }
 
-li a{
+li a {
   color: black;
   transition: all 0.3s;
-  padding:2px 10px;
+  padding: 2px 10px;
   border-radius: 10px;
 }
 
-li a:hover{
-  color:black;
+li a:hover {
+  color: black;
 }
 
-li .login{
+li .login {
   font-size: 16px;
   font-weight: 500;
 }
 
-header h2{
+header h2 {
   margin-left: 1rem;
 }
 
-section{
+section {
   height: 100vh;
   width: 90%;
   margin: 0 auto;
 }
 
-.home{
+.home {
   display: flex;
   margin-top: 6rem;
-  gap:10rem;
+  gap: 10rem;
   position: relative;
 }
 
-.home .left h1{
+.home .left h1 {
   margin-bottom: 1rem;
 }
 
-.home button{
+.home button {
   color: white;
-  border:none;
+  border: none;
   background-color: #213547;
   width: 200px;
   padding: 0.5rem;
   border-radius: 0;
 }
 
-.home a:hover{
+.home a:hover {
   color: white;
   background-color: #2c4860;
 }
 
-.home .left h5{
-  margin:2rem 0;
+.home .left h5 {
+  margin: 2rem 0;
 }
 
-.bg svg{
+.bg svg {
   position: absolute;
   bottom: 0;
 }
 
-.card-container{
+.card-container {
   width: 80%;
   margin: auto;
   display: grid;
-  gap:2.5rem;
-  grid-template-columns: repeat(auto-fit,13rem);
-  cursor:pointer
+  gap: 2.5rem;
+  grid-template-columns: repeat(auto-fit, 13rem);
+  cursor: pointer;
 }
 
-.card{
+.card {
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
   text-align: center;
   border-radius: 5px;
 }
 
-.card-body{
+.card-body {
   background-color: #d4f6e8;
   padding: 1rem;
 }
 
-.card-body .title{
-  margin-bottom:5px;
+.card-body .title {
+  margin-bottom: 5px;
   font-size: 15px;
-  font-weight:500;
+  font-weight: 500;
 }
 
-.card-body .icons{
+.card-body .icons {
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
 
-.card-body .timer{
+.card-body .timer {
   display: flex;
   align-items: center;
-  gap:2px;
+  gap: 2px;
   font-size: 13px;
   font-weight: 500;
 }
 
-.action{
+.action {
   display: flex;
   font-size: 19px;
   justify-content: space-between;
@@ -140,35 +144,35 @@ section{
   width: 45px;
 }
 
-.editIcon{
+.editIcon {
   color: black;
   font-size: 18px;
 }
 
-.action a:hover{
+.action a:hover {
   color: black;
 }
 
-.deleteIcon{
-  color: rgb(239,53,53);
+.deleteIcon {
+  color: rgb(239, 53, 53);
   font-size: 20px;
   cursor: pointer;
 }
 
-.modal{
+.modal {
   position: fixed;
   top: 34%;
   z-index: 10;
   padding: 2rem;
   border-radius: 6px;
-  border:none;
-  left:30%;
+  border: none;
+  left: 30%;
   width: 40%;
 }
 
-.backdrop{
+.backdrop {
   position: fixed;
-  top:0;
+  top: 0;
   left: 0;
   width: 100%;
   height: 100vh;
@@ -176,62 +180,62 @@ section{
   z-index: 9;
 }
 
-.form{
+.form {
   width: 71%;
   margin: 0 auto;
   text-align: center;
 }
 
-.form-header{
+.form-header {
   background-color: #d4f6e8;
   height: 3px;
   text-align: center;
 }
 
-.form-control{
+.form-control {
   display: flex;
   justify-content: space-between;
-  gap:1rem;
+  gap: 1rem;
   margin-top: 1rem;
 }
 
-.form-control .input{
+.form-control .input {
   flex-basis: 70%;
-  border:1px solid rgb(156 163 175);
+  border: 1px solid rgb(156 163 175);
   border-radius: 4px;
   height: 30px;
   padding: 2px;
 }
 
-.form-control .input-textarea{
+.form-control .input-textarea {
   border: 1px solid rgb(156 163 175);
   border-radius: 4px;
   flex-basis: 70%;
   padding: 2px;
 }
 
-.form button{
-  margin:2rem 0;
-  border:none;
+.form button {
+  margin: 2rem 0;
+  border: none;
   background-color: #d4f6e8;
   font-size: 14px;
   box-shadow: 0 1px 5px rgba(0, 0, 0, 0.3);
 }
 
-.form p{
+.form p {
   cursor: pointer;
   display: inline;
   border-bottom: 1px solid #307bbd;
-  color:rga(4,136,170);
+  color: rga(4, 136, 170);
   font-size: 14px;
   color: #307bbd;
 }
 
-.form .error{
-  color:red;
+.form .error {
+  color: red;
   font-size: 13px;
 }
-.container{
+.container {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -239,17 +243,17 @@ section{
   height: 100vh;
 }
 
-.add-recipe{
+.add-recipe {
   width: 100%;
 }
 
-.recipe{
+.recipe {
   margin-bottom: 2rem;
   padding-bottom: 2rem;
 }
 
-.footer{
-  width:100vw;
+.footer {
+  width: 100vw;
   height: 30px;
   color: white;
   background-color: #213547;
@@ -261,32 +265,30 @@ section{
   font-size: 14px;
 }
 
-.outer-container{
+.outer-container {
   width: 70%;
   margin: 5rem auto;
 }
 
-.outer-container .profile{
+.outer-container .profile {
   display: flex;
-  gap:1rem;
+  gap: 1rem;
   align-items: center;
 }
 
-.outer-container .title{
+.outer-container .title {
   margin: 1rem 0;
   text-transform: uppercase;
 }
 
-.outer-container .recipe-details{
+.outer-container .recipe-details {
   display: flex;
   gap: 3rem;
   align-items: justify;
   margin-top: 1rem;
 }
 
-.active{
-  color:black !important;
+.active {
+  color: black !important;
   background-color: #d4f6e8;
 }
-
-
