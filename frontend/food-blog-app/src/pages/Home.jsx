@@ -1,12 +1,10 @@
 import React from "react";
 import foodimg from "../assets/Cake_image.jpg";
-import Navbar from "../components/Navbar";
-import Footer from "../components/footer";
+import RecipeItems from "../components/RecipeItems";
 
 function Home() {
   return (
     <>
-      <Navbar />
       <section className="home">
         <div className="left">
           <h1>Food Recipe App</h1>
@@ -17,7 +15,9 @@ function Home() {
           <img src={foodimg} alt="Food" width="320px" height="300px" />
         </div>
       </section>
-      <Footer />
+      <div className="recipe">
+        <RecipeItems />
+      </div>
     </>
   );
 }
