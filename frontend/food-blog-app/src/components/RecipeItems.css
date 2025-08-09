@@ -1,0 +1,130 @@
+/* RecipeItems.css */
+.recipe-container {
+  padding: 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.card-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 20px;
+  padding: 20px 0;
+}
+
+.recipe-card {
+  border: 1px solid #ddd;
+  border-radius: 12px;
+  padding: 16px;
+  background-color: white;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  overflow: hidden;
+}
+
+.recipe-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 15px rgba(0, 0, 0, 0.15);
+}
+
+.recipe-image {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+  border-radius: 8px;
+  margin-bottom: 12px;
+}
+
+.card-body {
+  padding: 8px 0;
+}
+
+.recipe-title {
+  color: #333;
+  font-size: 18px;
+  font-weight: bold;
+  margin-bottom: 12px;
+  line-height: 1.4;
+}
+
+.recipe-icons {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 10px;
+}
+
+.recipe-timer {
+  color: #666;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 14px;
+}
+
+.timer-icon {
+  color: #888;
+  font-size: 16px;
+}
+
+.recipe-love {
+  color: #e74c3c;
+  cursor: pointer;
+  font-size: 18px;
+  transition: color 0.3s ease;
+}
+
+.recipe-love:hover {
+  color: #c0392b;
+}
+
+.loading-message,
+.error-message,
+.no-recipes-message {
+  padding: 40px 20px;
+  text-align: center;
+  font-size: 16px;
+}
+
+.loading-message {
+  color: #666;
+}
+
+.error-message {
+  color: #e74c3c;
+  background-color: #fdf2f2;
+  border: 1px solid #f5c6cb;
+  border-radius: 8px;
+}
+
+.no-recipes-message {
+  color: #666;
+  background-color: #f8f9fa;
+  border: 1px solid #dee2e6;
+  border-radius: 8px;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .card-container {
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 15px;
+    padding: 15px;
+  }
+
+  .recipe-card {
+    padding: 12px;
+  }
+
+  .recipe-title {
+    font-size: 16px;
+  }
+}
+
+@media (max-width: 480px) {
+  .card-container {
+    grid-template-columns: 1fr;
+    gap: 10px;
+    padding: 10px;
+  }
+}
