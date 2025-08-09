@@ -1,0 +1,24 @@
+/* MainNavigation.css */
+.main-navigation {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.main-content {
+  flex: 1;
+  margin-top: 80px; /* Space for fixed navbar */
+  padding: 20px 0;
+}
+
+.footer-container {
+  margin-top: auto;
+}
+
+/* Ensure proper spacing for fixed header */
+@media (max-width: 768px) {
+  .main-content {
+    margin-top: 70px;
+    padding: 15px 0;
+  }
+}
