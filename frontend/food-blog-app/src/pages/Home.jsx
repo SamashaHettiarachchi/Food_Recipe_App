@@ -8,24 +8,25 @@ function Home() {
     <>
       <section className="home-section">
         <div className="home-left">
-          <h1 className="home-title">Food Recipe App</h1>
+          <h1 className="home-title">🍳 Food Recipe App</h1>
           <h5 className="home-subtitle">
-            Your one-stop solution for all food recipes
+            Discover amazing recipes from around the world and share your own culinary masterpieces with our vibrant community of food lovers!
           </h5>
-          <button className="home-button">Share your recipe</button>
+          <button className="home-button">✨ Share Your Recipe</button>
         </div>
         <div className="home-right">
           <img
             src={foodimg}
-            alt="Food"
+            alt="Delicious Food"
             className="home-image"
-            width="320"
-            height="300"
+            width="400"
+            height="350"
           />
         </div>
       </section>
+      
       <div className="recipes-section">
-        <h2 className="recipes-title">Our Latest Recipes</h2>
+        <h2 className="recipes-title">🌟 Our Latest Recipes</h2>
         <RecipeItems />
       </div>
     </>
