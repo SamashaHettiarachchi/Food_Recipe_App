@@ -31,7 +31,7 @@ const Navbar = () => {
     setUser(null);
     alert("Logged out successfully!");
   };
-  
+
   return (
     <>
       <header className="navbar-header">
@@ -60,7 +60,7 @@ const Navbar = () => {
               <>
                 <li className="navbar-item user-info">
                   <span className="welcome-text">
-                    Welcome, <strong>{user?.email.split('@')[0]}</strong>
+                    Welcome, <strong>{user?.email.split("@")[0]}</strong>
                   </span>
                 </li>
                 <li className="navbar-item">
@@ -81,7 +81,7 @@ const Navbar = () => {
       </header>
       {isOpen && (
         <Model setIsOpen={setIsOpen}>
-          <InputForm 
+          <InputForm
             setIsOpen={(success) => {
               setIsOpen(false);
               if (success) {
@@ -93,7 +93,7 @@ const Navbar = () => {
                   setUser(JSON.parse(userData));
                 }
               }
-            }} 
+            }}
           />
         </Model>
       )}
