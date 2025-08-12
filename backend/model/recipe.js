@@ -23,6 +23,11 @@ const recipeSchema = new mongoose.Schema(
       type: String,
       required: false, // Changed to false
     },
+    createdBy:{
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+      required: true
+    }
   },
   { timestamps: true }
 );
