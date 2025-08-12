@@ -1,4 +1,35 @@
 const Recipes = require("../model/recipe");
+const multer = require("multer");
+const path = require("path");
+
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, "./public/images");
+  },
+  filename: function (req, file, cb) {
+    const uniqueSuffix = Date.now() + "-" + Math.round(Math.random() * 1e9);
+    const extension = path.extname(file.originalname);
+    cb(null, file.fieldname + "-" + uniqueSuffix + extension);
+  },
+});
+
+const fileFilter = (req, file, cb) => {
+  // Check if file is an image
+  if (file.mimetype.startsWith("image/")) {
+    cb(null, true);
+  } else {
+    cb(new Error("Only image files are allowed!"), false);
+  }
+};
+
+const upload = multer({
+  storage: storage,
+  fileFilter: fileFilter,
+  limits: {
+    fileSize: 5 * 1024 * 1024, // 5MB limit
+  },
+});
+
 const getRecipe = async (req, res) => {
   try {
     const recipes = await Recipes.find({});
@@ -36,8 +67,10 @@ const getRecipee = async (req, res) => {
 };
 
 const addRecipe = async (req, res) => {
-  console.log("Request body:", req.body); // Debug log
-  const { title, ingredients, instructions, time, coverImage } = req.body;
+  console.log("Request body:", req.body);
+  console.log("Request file:", req.file);
+
+  const { title, ingredients, instructions, time } = req.body;
 
   if (!title || !ingredients || !instructions) {
     return res.status(400).json({
@@ -47,20 +80,35 @@ const addRecipe = async (req, res) => {
   }
 
   try {
+    // Handle ingredients - parse if it's a string
+    let parsedIngredients = ingredients;
+    if (typeof ingredients === "string") {
+      try {
+        parsedIngredients = JSON.parse(ingredients);
+      } catch (e) {
+        // If JSON parsing fails, split by newlines
+        parsedIngredients = ingredients
+          .split("\n")
+          .filter((item) => item.trim());
+      }
+    }
+
     const newRecipe = await Recipes.create({
       title,
-      ingredients,
+      ingredients: parsedIngredients,
       instructions,
       time: time || "Not specified",
-      coverImage: coverImage || "No image",
+      coverImage: req.file ? req.file.filename : null,
+      createdBy: req.user.id
     });
-    console.log("Recipe created successfully:", newRecipe); // Debug log
+
+    console.log("Recipe created successfully:", newRecipe);
     return res.status(201).json({
       message: "Recipe created successfully",
       recipe: newRecipe,
     });
   } catch (error) {
-    console.error("Error creating recipe:", error); // Debug log
+    console.error("Error creating recipe:", error);
     return res.status(500).json({
       message: "Error creating recipe",
       error: error.message,
@@ -68,11 +116,12 @@ const addRecipe = async (req, res) => {
   }
 };
 
-const editRecipe = async(req, res) => {
-  const {title, ingredients, instructions, time, coverImage} = req.body;
+const editRecipe = async (req, res) => {
+  const { title, ingredients, instructions, time, coverImage } = req.body;
   if (!title || !ingredients || !instructions) {
     return res.status(400).json({
-      message: "Required fields (title, ingredients, instructions) cannot be empty",
+      message:
+        "Required fields (title, ingredients, instructions) cannot be empty",
     });
   }
   try {
@@ -131,4 +180,5 @@ module.exports = {
   editRecipe,
   deleteRecipe,
   getRecipee,
+  upload,
 };
