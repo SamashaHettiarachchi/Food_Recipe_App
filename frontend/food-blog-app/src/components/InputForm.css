@@ -32,6 +32,10 @@
   background-color: #fff;
   transition: all 0.3s ease;
   box-sizing: border-box;
+  pointer-events: auto;
+  user-select: text;
+  -webkit-user-select: text;
+  -moz-user-select: text;
 }
 
 .form-control .input:focus {
@@ -98,8 +102,13 @@
 /* Error message styling */
 .form .error {
   color: #dc3545;
-  font-size: 13px;
-  margin-top: 5px;
+  font-size: 14px;
+  margin-bottom: 15px;
+  padding: 10px;
+  background-color: #f8d7da;
+  border: 1px solid #f5c6cb;
+  border-radius: 6px;
+  text-align: center;
 }
 
 /* Responsive design */
