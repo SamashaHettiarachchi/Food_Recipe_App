@@ -8,10 +8,11 @@ function Model({ children, setIsOpen }) {
 
   return (
     <>
-      <div className="backdrop" onClick={closeModal}> </div>
-      <dialog className="model" open onClick={(e) => e.stopPropagation()}>
-        {children}
-      </dialog>
+      <div className="backdrop" onClick={closeModal}>
+        <div className="model" onClick={(e) => e.stopPropagation()}>
+          {children}
+        </div>
+      </div>
     </>
   );
 }
