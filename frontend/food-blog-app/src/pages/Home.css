@@ -1,48 +1,106 @@
-/* Home.css */
+/* Home.css - Enhanced Yellow Theme */
+
+/* Hero Section */
 .home-section {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 40px 20px;
-  max-width: 1200px;
+  padding: 60px 40px;
+  max-width: 1400px;
   margin: 0 auto;
-  gap: 60px;
+  gap: 80px;
+  background: linear-gradient(135deg, #fff9c4 0%, #fffacd 50%, #ffeb3b 100%);
+  border-radius: 20px;
+  margin-top: 20px;
+  box-shadow: 0 15px 35px rgba(255, 193, 7, 0.3);
+  position: relative;
+  overflow: hidden;
+}
+
+.home-section::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  right: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(circle, rgba(255, 235, 59, 0.1) 0%, transparent 70%);
+  animation: float 6s ease-in-out infinite;
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0px) rotate(0deg); }
+  50% { transform: translateY(-20px) rotate(5deg); }
 }
 
 .home-left {
   flex: 1;
-  max-width: 500px;
+  max-width: 600px;
+  z-index: 2;
+  position: relative;
 }
 
 .home-title {
-  font-size: 48px;
-  font-weight: bold;
-  color: #333;
-  margin-bottom: 20px;
+  font-size: 56px;
+  font-weight: 800;
+  background: linear-gradient(45deg, #f57f17, #ff9800, #ffc107);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  margin-bottom: 25px;
   line-height: 1.2;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .home-subtitle {
-  font-size: 18px;
-  color: #666;
-  margin-bottom: 30px;
-  line-height: 1.5;
+  font-size: 20px;
+  color: #6d4c41;
+  margin-bottom: 35px;
+  line-height: 1.6;
+  font-weight: 500;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
 }
 
 .home-button {
-  background-color: #213547;
-  color: white;
+  background: linear-gradient(45deg, #ff9800, #ffc107, #ffeb3b);
+  color: #1a1a1a;
   border: none;
-  padding: 12px 24px;
-  font-size: 16px;
-  border-radius: 8px;
+  padding: 16px 32px;
+  font-size: 18px;
+  border-radius: 50px;
   cursor: pointer;
-  transition: background-color 0.3s ease;
-  font-weight: 500;
+  transition: all 0.3s ease;
+  font-weight: 600;
+  box-shadow: 0 8px 20px rgba(255, 193, 7, 0.4);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  position: relative;
+  overflow: hidden;
+}
+
+.home-button::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+  transition: left 0.5s;
+}
+
+.home-button:hover::before {
+  left: 100%;
 }
 
 .home-button:hover {
-  background-color: #2c4860;
+  transform: translateY(-3px);
+  box-shadow: 0 12px 25px rgba(255, 193, 7, 0.6);
+  background: linear-gradient(45deg, #f57f17, #ff9800, #ffc107);
+}
+
+.home-button:active {
+  transform: translateY(-1px);
 }
 
 .home-right {
@@ -50,34 +108,105 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  z-index: 2;
+  position: relative;
 }
 
 .home-image {
   max-width: 100%;
   height: auto;
-  border-radius: 12px;
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+  border-radius: 20px;
+  box-shadow: 0 20px 40px rgba(255, 193, 7, 0.3);
+  transition: transform 0.3s ease;
+  border: 4px solid rgba(255, 193, 7, 0.5);
 }
 
+.home-image:hover {
+  transform: scale(1.05) rotate(2deg);
+}
+
+/* Recipes Section */
 .recipes-section {
-  padding: 40px 0;
-  background-color: #f8f9fa;
+  padding: 80px 40px;
+  background: linear-gradient(180deg, #fffde7 0%, #fff8e1 50%, #fff3e0 100%);
+  position: relative;
+}
+
+.recipes-section::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, #ff9800, #ffc107, #ffeb3b, #ffc107, #ff9800);
+  background-size: 200% 100%;
+  animation: shimmer 3s linear infinite;
+}
+
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
 }
 
 .recipes-title {
   text-align: center;
-  font-size: 36px;
-  font-weight: bold;
-  color: #333;
-  margin-bottom: 40px;
+  font-size: 42px;
+  font-weight: 700;
+  background: linear-gradient(45deg, #e65100, #f57f17, #ff9800);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  margin-bottom: 50px;
+  position: relative;
+}
+
+.recipes-title::after {
+  content: '';
+  position: absolute;
+  bottom: -10px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100px;
+  height: 4px;
+  background: linear-gradient(90deg, #ff9800, #ffc107);
+  border-radius: 2px;
 }
 
 /* Responsive design */
+@media (max-width: 1200px) {
+  .home-section {
+    padding: 50px 30px;
+    gap: 60px;
+  }
+}
+
 @media (max-width: 968px) {
   .home-section {
     flex-direction: column;
-    gap: 40px;
+    gap: 50px;
     text-align: center;
+    padding: 40px 20px;
+  }
+
+  .home-title {
+    font-size: 42px;
+  }
+
+  .home-subtitle {
+    font-size: 18px;
+  }
+
+  .recipes-section {
+    padding: 60px 20px;
+  }
+}
+
+@media (max-width: 768px) {
+  .home-section {
+    padding: 30px 15px;
+    gap: 40px;
+    margin-top: 10px;
   }
 
   .home-title {
@@ -87,34 +216,69 @@
   .home-subtitle {
     font-size: 16px;
   }
-}
 
-@media (max-width: 768px) {
-  .home-section {
-    padding: 20px;
-    gap: 30px;
+  .home-button {
+    padding: 14px 28px;
+    font-size: 16px;
   }
 
-  .home-title {
+  .recipes-title {
     font-size: 32px;
+  }
+
+  .recipes-section {
+    padding: 50px 15px;
+  }
+}
+
+@media (max-width: 480px) {
+  .home-title {
+    font-size: 28px;
   }
 
   .home-subtitle {
     font-size: 14px;
   }
 
+  .home-button {
+    width: 100%;
+    padding: 16px;
+    font-size: 16px;
+  }
+
   .recipes-title {
-    font-size: 28px;
+    font-size: 26px;
+  }
+
+  .home-section {
+    padding: 20px 10px;
   }
 }
 
-@media (max-width: 480px) {
-  .home-title {
-    font-size: 24px;
-  }
+/* Additional enhancements */
+.home-section * {
+  animation: fadeInUp 0.8s ease-out;
+}
 
-  .home-button {
-    width: 100%;
-    padding: 14px;
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
   }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Yellow accent elements */
+.yellow-accent {
+  color: #f57f17;
+}
+
+.yellow-bg {
+  background-color: #fff9c4;
+  padding: 10px 20px;
+  border-radius: 20px;
+  display: inline-block;
 }
