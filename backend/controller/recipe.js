@@ -99,7 +99,7 @@ const addRecipe = async (req, res) => {
       instructions,
       time: time || "Not specified",
       coverImage: req.file ? req.file.filename : null,
-      createdBy: req.user.id
+      createdBy: req.user.id,
     });
 
     console.log("Recipe created successfully:", newRecipe);
@@ -117,30 +117,49 @@ const addRecipe = async (req, res) => {
 };
 
 const editRecipe = async (req, res) => {
-  const { title, ingredients, instructions, time, coverImage } = req.body;
+  const { title, ingredients, instructions, time } = req.body;
   if (!title || !ingredients || !instructions) {
     return res.status(400).json({
       message:
         "Required fields (title, ingredients, instructions) cannot be empty",
     });
   }
+
   try {
-    const updatedRecipe = await Recipes.findByIdAndUpdate(
-      req.params.id,
-      {
-        title,
-        ingredients,
-        instructions,
-        time: time || "Not specified",
-        coverImage: coverImage || "No image",
-      },
-      { new: true }
-    );
-    if (!updatedRecipe) {
+    // Check if recipe exists and user owns it
+    const existingRecipe = await Recipes.findById(req.params.id);
+    if (!existingRecipe) {
       return res.status(404).json({
         message: "Recipe not found",
       });
     }
+
+    // Check if user owns this recipe
+    if (existingRecipe.createdBy.toString() !== req.user.id) {
+      return res.status(403).json({
+        message: "You can only edit your own recipes",
+      });
+    }
+
+    // Prepare update data
+    const updateData = {
+      title,
+      ingredients,
+      instructions,
+      time: time || "Not specified",
+    };
+
+    // Handle file upload if new image is provided
+    if (req.file) {
+      updateData.coverImage = req.file.filename;
+    }
+
+    const updatedRecipe = await Recipes.findByIdAndUpdate(
+      req.params.id,
+      updateData,
+      { new: true }
+    );
+
     res.status(200).json({
       message: "Recipe updated successfully",
       recipe: updatedRecipe,
@@ -155,12 +174,23 @@ const editRecipe = async (req, res) => {
 };
 const deleteRecipe = async (req, res) => {
   try {
-    const deletedRecipe = await Recipes.findByIdAndDelete(req.params.id);
-    if (!deletedRecipe) {
+    // Check if recipe exists and user owns it
+    const existingRecipe = await Recipes.findById(req.params.id);
+    if (!existingRecipe) {
       return res.status(404).json({
         message: "Recipe not found",
       });
     }
+
+    // Check if user owns this recipe
+    if (existingRecipe.createdBy.toString() !== req.user.id) {
+      return res.status(403).json({
+        message: "You can only delete your own recipes",
+      });
+    }
+
+    const deletedRecipe = await Recipes.findByIdAndDelete(req.params.id);
+
     res.status(200).json({
       message: "Recipe deleted successfully",
       recipe: deletedRecipe,
@@ -174,6 +204,121 @@ const deleteRecipe = async (req, res) => {
   }
 };
 
+// Add recipe to favorites
+const addToFavorites = async (req, res) => {
+  try {
+    console.log("addToFavorites called with params:", req.params);
+    console.log("req.user:", req.user);
+    console.log("req.user.id:", req.user.id);
+
+    const recipe = await Recipes.findById(req.params.id);
+    if (!recipe) {
+      return res.status(404).json({ message: "Recipe not found" });
+    }
+
+    // Initialize favorites array if it doesn't exist
+    if (!recipe.favorites) {
+      recipe.favorites = [];
+    }
+
+    // Check if already favorited
+    if (recipe.favorites.some((favId) => favId.toString() === req.user.id)) {
+      return res.status(400).json({ message: "Recipe already in favorites" });
+    }
+
+    recipe.favorites.push(req.user.id);
+    await recipe.save();
+
+    res.status(200).json({
+      message: "Recipe added to favorites",
+      recipe: recipe,
+    });
+  } catch (error) {
+    console.error("Error adding to favorites:", error);
+    return res.status(500).json({
+      message: "Error adding to favorites",
+      error: error.message,
+    });
+  }
+};
+
+// Remove recipe from favorites
+const removeFromFavorites = async (req, res) => {
+  try {
+    console.log("removeFromFavorites called with params:", req.params);
+    console.log("req.user:", req.user);
+    console.log("req.user.id:", req.user.id);
+
+    const recipe = await Recipes.findById(req.params.id);
+    if (!recipe) {
+      return res.status(404).json({ message: "Recipe not found" });
+    }
+
+    // Initialize favorites array if it doesn't exist
+    if (!recipe.favorites) {
+      recipe.favorites = [];
+    }
+
+    recipe.favorites = recipe.favorites.filter(
+      (userId) => userId.toString() !== req.user.id
+    );
+    await recipe.save();
+
+    res.status(200).json({
+      message: "Recipe removed from favorites",
+      recipe: recipe,
+    });
+  } catch (error) {
+    console.error("Error removing from favorites:", error);
+    return res.status(500).json({
+      message: "Error removing from favorites",
+      error: error.message,
+    });
+  }
+};
+
+// Get user's favorite recipes
+const getFavoriteRecipes = async (req, res) => {
+  try {
+    const favoriteRecipes = await Recipes.find({
+      favorites: req.user.id,
+    }).populate("createdBy", "email");
+
+    res.status(200).json({
+      message: "Favorite recipes retrieved successfully",
+      count: favoriteRecipes.length,
+      recipes: favoriteRecipes,
+    });
+  } catch (error) {
+    console.error("Error fetching favorite recipes:", error);
+    return res.status(500).json({
+      message: "Error fetching favorite recipes",
+      error: error.message,
+    });
+  }
+};
+
+// Get user's own recipes
+const getMyRecipes = async (req, res) => {
+  try {
+    const myRecipes = await Recipes.find({
+      createdBy: req.user.id,
+    }).populate("createdBy", "email");
+
+    res.status(200).json({
+      message: "Your recipes retrieved successfully",
+      count: myRecipes.length,
+      recipes: myRecipes,
+    });
+  } catch (error) {
+    console.error("Error fetching your recipes:", error);
+    return res.status(500).json({
+      message: "Error fetching your recipes",
+      error: error.message,
+    });
+  }
+};
+
 module.exports = {
   getRecipe,
   addRecipe,
@@ -181,4 +326,8 @@ module.exports = {
   deleteRecipe,
   getRecipee,
   upload,
+  addToFavorites,
+  removeFromFavorites,
+  getFavoriteRecipes,
+  getMyRecipes,
 };

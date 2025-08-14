@@ -23,11 +23,17 @@ const recipeSchema = new mongoose.Schema(
       type: String,
       required: false, // Changed to false
     },
-    createdBy:{
+    createdBy: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
-      required: true
-    }
+      required: true,
+    },
+    favorites: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User",
+      },
+    ],
   },
   { timestamps: true }
 );

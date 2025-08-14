@@ -17,14 +17,24 @@ const userSignUp = async (req, res) => {
     const hashedPassword = await bcrypt.hash(password, 10);
     const newUser = new User({ email, password: hashedPassword });
     await newUser.save();
+
     let token = jwt.sign(
       { email: newUser.email, id: newUser._id },
       process.env.JWT_SECRET,
       { expiresIn: "1h" }
     );
-    return res
-      .status(201)
-      .json({ message: "User created successfully", user: newUser, token });
+
+    // Return user data without password
+    const userResponse = {
+      id: newUser._id,
+      email: newUser.email,
+    };
+
+    return res.status(201).json({
+      message: "User created successfully",
+      user: userResponse,
+      token,
+    });
   } catch (error) {
     res.status(500).json({ message: "Error creating user", error });
   }
@@ -48,10 +58,31 @@ const userLogin = async (req, res) => {
       return res.status(401).json({ message: "Invalid credentials" });
     }
 
-    const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
-      expiresIn: "1h",
+    const token = jwt.sign(
+      { id: user._id, email: user.email },
+      process.env.JWT_SECRET,
+      {
+        expiresIn: "1h",
+      }
+    );
+
+    // Return user data along with token (excluding password)
+    const userResponse = {
+      id: user._id,
+      email: user.email,
+    };
+
+    console.log("Login response being sent:", {
+      message: "Login successful",
+      token,
+      user: userResponse,
     });
-    res.status(200).json({ message: "Login successful", token });
+
+    res.status(200).json({
+      message: "Login successful",
+      token,
+      user: userResponse,
+    });
   } catch (error) {
     res.status(500).json({ message: "Error logging in", error });
   }
