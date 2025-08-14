@@ -3,12 +3,16 @@ import "./App.css";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import Home from "./pages/Home";
 import AddRecipe from "./pages/AddRecipe";
+import EditRecipe from "./pages/EditRecipe";
+import RecipeDetails from "./pages/RecipeDetails";
 import MainNavigation from "./components/MainNavigation";
+import { AuthProvider } from "./context/AuthContext";
 import axios from "axios";
+import { API_BASE_URL } from "./config";
 
 const getAllRecipes = async () => {
   try {
-    const response = await axios.get("http://localhost:5000/api/recipe");
+    const response = await axios.get(`${API_BASE_URL}/api/recipe`);
     return response.data;
   } catch (error) {
     console.error("Error fetching recipes:", error);
@@ -48,27 +52,79 @@ const LoadingSpinner = () => (
     </div>
   </div>
 );
-const getMyRecipe=async()=>{
-  let user = JSON.parse(localStorage.getItem("user"));
-  let getAllRecipes=await getAllRecipes()
-  return getAllRecipes.filter(recipe => recipe.createdBy === user._id);
-}
+const getMyRecipes = async () => {
+  try {
+    const token = localStorage.getItem("token");
+    if (!token) {
+      return [];
+    }
+    const response = await axios.get(`${API_BASE_URL}/api/recipe/my-recipes`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching my recipes:", error);
+    return [];
+  }
+};
+
+const getFavoriteRecipes = async () => {
+  try {
+    const token = localStorage.getItem("token");
+    if (!token) {
+      return [];
+    }
+    const response = await axios.get(`${API_BASE_URL}/api/recipe/favorites`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching favorite recipes:", error);
+    return [];
+  }
+};
+
+const getRecipeById = async ({ params }) => {
+  try {
+    console.log("Fetching recipe with ID:", params.id);
+    const response = await axios.get(`${API_BASE_URL}/api/recipe/${params.id}`);
+    console.log("Recipe data received:", response.data);
+    return { recipe: response.data };
+  } catch (error) {
+    console.error("Error fetching recipe:", error);
+    return { recipe: null, error: "Recipe not found" };
+  }
+};
 
 const router = createBrowserRouter([
   {
     element: <MainNavigation />,
     children: [
       { path: "/", element: <Home />, loader: getAllRecipes },
-      { path: "/myRecipes", element: <Home /> , loader: getMyRecipe },
-      { path: "/favourite", element: <Home /> },
+      { path: "/myRecipes", element: <Home />, loader: getMyRecipes },
+      { path: "/favourite", element: <Home />, loader: getFavoriteRecipes },
       { path: "/addRecipe", element: <AddRecipe /> },
+      {
+        path: "/editRecipe/:id",
+        element: <EditRecipe />,
+        loader: getRecipeById,
+      },
+      {
+        path: "/recipe/:id",
+        element: <RecipeDetails />,
+        loader: getRecipeById,
+      },
     ],
   },
 ]);
 
 export default function App() {
   return (
-    <>
+    <AuthProvider>
       <RouterProvider router={router} fallbackElement={<LoadingSpinner />} />
       <style>{`
         @keyframes spin {
@@ -76,6 +132,6 @@ export default function App() {
           100% { transform: rotate(360deg); }
         }
       `}</style>
-    </>
+    </AuthProvider>
   );
 }

@@ -3,16 +3,20 @@
   min-height: 100vh;
   display: flex;
   flex-direction: column;
+  width: 100%;
 }
 
 .main-content {
   flex: 1;
   margin-top: 80px; /* Space for fixed navbar */
   padding: 20px 0;
+  width: 100%;
 }
 
 .footer-container {
   margin-top: auto;
+  width: 100%;
+  position: relative;
 }
 
 /* Ensure proper spacing for fixed header */
