@@ -1,6 +1,6 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import foodimg from "../assets/Cake_image.jpg";
+import foodimg from "../assets/foodRecipe.jpg";
 import RecipeItems from "../components/RecipeItems";
 import InputForm from "../components/inputForm";
 import Model from "../components/Model";
@@ -8,8 +8,8 @@ import "./Home.css";
 
 function Home() {
   const navigate = useNavigate();
-  const[isOpen,setIsOpen] = React.useState(false);
-  
+  const [isOpen, setIsOpen] = React.useState(false);
+
   // Check if user is logged in
   const isLoggedIn = () => {
     const token = localStorage.getItem("token");
@@ -44,10 +44,7 @@ function Home() {
             Discover amazing recipes from around the world and share your own
             culinary masterpieces with our vibrant community of food lovers!
           </h5>
-          <button
-            onClick={addRecipe}
-            className="home-button"
-          >
+          <button onClick={addRecipe} className="home-button">
             Share Your Recipe
           </button>
         </div>
@@ -63,7 +60,6 @@ function Home() {
       </section>
 
       <div className="recipes-section">
-        <h2 className="recipes-title">Our Latest Recipes</h2>
         <RecipeItems />
       </div>
 
