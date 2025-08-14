@@ -127,8 +127,10 @@
 }
 
 .home-image {
-  max-width: 100%;
+  width: 420px; /* keep hero image a fixed, reasonable width on desktop */
+  max-width: 100%; /* never overflow container on smaller screens */
   height: auto;
+  object-fit: cover;
   border-radius: 20px;
   box-shadow: 0 20px 40px rgba(255, 193, 7, 0.3);
   transition: transform 0.3s ease;
@@ -213,6 +215,9 @@
     text-align: center;
     padding: 40px 20px;
   }
+  .home-image {
+    width: 360px;
+  }
 
   .home-title {
     font-size: 42px;
@@ -232,6 +237,9 @@
     padding: 30px 15px;
     gap: 40px;
     margin-top: 10px;
+  }
+  .home-image {
+    width: 300px;
   }
 
   .home-title {
@@ -259,6 +267,9 @@
 @media (max-width: 480px) {
   .home-title {
     font-size: 28px;
+  }
+  .home-image {
+    width: 260px;
   }
 
   .home-subtitle {
