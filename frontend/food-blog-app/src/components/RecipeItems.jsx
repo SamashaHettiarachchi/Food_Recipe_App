@@ -289,6 +289,13 @@ const RecipeItems = () => {
 
   const getRecipeImage = (recipe) => {
     if (recipe.coverImage) {
+      // If it's a full URL (e.g., Cloudinary), use as-is
+      if (
+        typeof recipe.coverImage === "string" &&
+        recipe.coverImage.startsWith("http")
+      ) {
+        return recipe.coverImage;
+      }
       return `${IMAGE_BASE_URL}/${recipe.coverImage}`;
     }
     return foodImg;

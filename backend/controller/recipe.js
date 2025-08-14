@@ -1,33 +1,31 @@
 const Recipes = require("../model/recipe");
 const multer = require("multer");
-const path = require("path");
+const { v2: cloudinary } = require("cloudinary");
+const { CloudinaryStorage } = require("multer-storage-cloudinary");
 
-const storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    cb(null, "./public/images");
-  },
-  filename: function (req, file, cb) {
-    const uniqueSuffix = Date.now() + "-" + Math.round(Math.random() * 1e9);
-    const extension = path.extname(file.originalname);
-    cb(null, file.fieldname + "-" + uniqueSuffix + extension);
+// Allow either discrete vars or a single CLOUDINARY_URL
+if (process.env.CLOUDINARY_URL) {
+  cloudinary.config(process.env.CLOUDINARY_URL);
+} else {
+  cloudinary.config({
+    cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+    api_key: process.env.CLOUDINARY_API_KEY,
+    api_secret: process.env.CLOUDINARY_API_SECRET,
+  });
+}
+
+const storage = new CloudinaryStorage({
+  cloudinary,
+  params: {
+    folder: "recipes",
+    allowed_formats: ["jpg", "jpeg", "png", "webp"],
+    transformation: [{ quality: "auto", fetch_format: "auto" }],
   },
 });
 
-const fileFilter = (req, file, cb) => {
-  // Check if file is an image
-  if (file.mimetype.startsWith("image/")) {
-    cb(null, true);
-  } else {
-    cb(new Error("Only image files are allowed!"), false);
-  }
-};
-
 const upload = multer({
-  storage: storage,
-  fileFilter: fileFilter,
-  limits: {
-    fileSize: 5 * 1024 * 1024, // 5MB limit
-  },
+  storage,
+  limits: { fileSize: 5 * 1024 * 1024 },
 });
 
 const getRecipe = async (req, res) => {
@@ -98,7 +96,8 @@ const addRecipe = async (req, res) => {
       ingredients: parsedIngredients,
       instructions,
       time: time || "Not specified",
-      coverImage: req.file ? req.file.filename : null,
+      // Cloudinary returns a file object with .path as the URL
+      coverImage: req.file ? req.file.path : null,
       createdBy: req.user.id,
     });
 
@@ -151,7 +150,7 @@ const editRecipe = async (req, res) => {
 
     // Handle file upload if new image is provided
     if (req.file) {
-      updateData.coverImage = req.file.filename;
+      updateData.coverImage = req.file.path; // cloudinary URL
     }
 
     const updatedRecipe = await Recipes.findByIdAndUpdate(

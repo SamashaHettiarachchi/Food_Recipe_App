@@ -31,7 +31,10 @@ const RecipeDetails = () => {
 
   const getRecipeImage = (r) => {
     if (!r) return "";
-    return r.coverImage ? `${IMAGE_BASE_URL}/${r.coverImage}` : "";
+    if (!r.coverImage) return "";
+    return r.coverImage.startsWith("http")
+      ? r.coverImage
+      : `${IMAGE_BASE_URL}/${r.coverImage}`;
   };
 
   const isOwner = (r) => {
