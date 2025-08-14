@@ -1,8 +1,11 @@
 import React from "react";
 import "./InputForm.css";
 import axios from "axios";
+import { API_BASE_URL } from "../config";
+import { useAuth } from "../context/AuthContext";
 
 function InputForm({ setIsOpen }) {
+  const { login } = useAuth();
   const [email, setEmail] = React.useState("");
   const [password, setPassword] = React.useState("");
   const [isSignUp, setIsSignUp] = React.useState(false);
@@ -28,7 +31,7 @@ function InputForm({ setIsOpen }) {
     try {
       let endpoint = isSignUp ? "signUp" : "login";
       const response = await axios.post(
-        `http://localhost:5000/api/user/${endpoint}`,
+        `${API_BASE_URL}/api/user/${endpoint}`,
         {
           email,
           password,
@@ -36,23 +39,45 @@ function InputForm({ setIsOpen }) {
       );
 
       // Store token and user data
+      console.log(
+        "Login/Signup response data:",
+        JSON.stringify(response.data, null, 2)
+      );
+      console.log("Response data object:", response.data);
+      console.log("Token:", response.data.token);
+      console.log("User:", response.data.user);
+
       if (response.data.token) {
         localStorage.setItem("token", response.data.token);
+        console.log("Token stored in localStorage");
       }
       if (response.data.user) {
         localStorage.setItem("user", JSON.stringify(response.data.user));
+        console.log("User data stored in localStorage:", response.data.user);
       }
 
-      console.log("Success:", response.data);
+      // Use AuthContext login method to update global state
+      if (response.data.token && response.data.user) {
+        console.log("Calling AuthContext login method");
+        login(response.data.token, response.data.user);
+        console.log("AuthContext login method called successfully");
+      } else {
+        console.error("Missing token or user data in response:", {
+          token: response.data.token,
+          user: response.data.user,
+          fullResponse: response.data,
+        });
+      }
+
       alert(isSignUp ? "Account created successfully!" : "Login successful!");
-      
+
       // Clear form fields
       setEmail("");
       setPassword("");
-      
-      // Call the success callback function passed from parent
-      if (setIsOpen && typeof setIsOpen === 'function') {
-        setIsOpen(); // This will trigger navigation to add recipe page
+
+      // Close the modal
+      if (setIsOpen && typeof setIsOpen === "function") {
+        setIsOpen();
       }
     } catch (error) {
       console.error("Error:", error);
