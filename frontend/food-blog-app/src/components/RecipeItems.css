@@ -5,6 +5,14 @@
   margin: 0 auto;
 }
 
+.recipes-section-title {
+  text-align: center;
+  color: #333;
+  font-size: 2rem;
+  margin-bottom: 20px;
+  font-weight: 600;
+}
+
 .card-container {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
@@ -47,61 +55,213 @@
   line-height: 1.4;
 }
 
-.recipe-icons {
+.recipe-info {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-top: 10px;
 }
 
 .recipe-timer {
-  color: #666;
   display: flex;
   align-items: center;
   gap: 6px;
+  color: #666;
   font-size: 14px;
 }
 
 .timer-icon {
-  color: #888;
+  color: #ffc107;
   font-size: 16px;
 }
 
-.recipe-love {
-  color: #e74c3c;
-  cursor: pointer;
-  font-size: 18px;
-  transition: color 0.3s ease;
+.recipe-actions {
+  display: flex;
+  gap: 8px;
+  align-items: center;
 }
 
-.recipe-love:hover {
-  color: #c0392b;
+.action-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 8px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+  font-size: 16px;
+  width: 36px;
+  height: 36px;
+}
+
+.action-btn:hover {
+  transform: scale(1.1);
+}
+
+.favorite-btn {
+  color: #ccc;
+  transition: all 0.3s ease;
+}
+
+.favorite-btn svg {
+  color: inherit;
+  transition: all 0.3s ease;
+}
+
+.favorite-btn.favorited svg {
+  animation: heartBeat 0.6s ease;
+}
+
+.favorite-btn:hover:not(:disabled) {
+  color: #ff6b6b;
+  transform: scale(1.1);
+}
+
+.favorite-btn:hover:not(:disabled) svg {
+  transform: scale(1.1);
+}
+
+/* Force red color for favorited state */
+.favorite-btn.favorited {
+  color: #ff6b6b !important;
+}
+
+.favorite-btn.favorited svg {
+  color: #ff6b6b !important;
+}
+
+/* Target FontAwesome icons specifically */
+.favorite-btn.favorited .fa-heart {
+  color: #ff6b6b !important;
+}
+
+.favorite-btn .fa-reg-heart {
+  color: #ccc !important;
+}
+
+/* Additional specificity to override FontAwesome */
+.favorite-btn.favorited svg path {
+  fill: #ff6b6b !important;
+}
+
+.favorite-btn svg path {
+  fill: #ccc !important;
+}
+
+/* Force colors with maximum specificity */
+.favorite-btn.favorited svg {
+  color: #ff6b6b !important;
+}
+
+.favorite-btn.favorited svg * {
+  color: #ff6b6b !important;
+  fill: #ff6b6b !important;
+}
+
+.favorite-btn svg {
+  color: #ccc !important;
+}
+
+.favorite-btn svg * {
+  color: #ccc !important;
+  fill: #ccc !important;
+}
+
+.favorite-btn.loading {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+.favorite-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.favorite-btn:active:not(:disabled) {
+  transform: scale(0.95);
+}
+
+.favorite-btn.favorited:active:not(:disabled) {
+  transform: scale(0.95);
+}
+
+.loading-spinner {
+  width: 16px;
+  height: 16px;
+  border: 2px solid #f3f3f3;
+  border-top: 2px solid #ff6b6b;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes heartBeat {
+  0% {
+    transform: scale(1);
+  }
+  25% {
+    transform: scale(1.3);
+  }
+  50% {
+    transform: scale(1.1);
+  }
+  75% {
+    transform: scale(1.3);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+@keyframes slideIn {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+.favorite-notification {
+  animation: slideIn 0.3s ease;
+}
+
+.edit-btn {
+  color: #4caf50;
+}
+
+.edit-btn:hover {
+  color: #45a049;
+  background-color: rgba(76, 175, 80, 0.1);
+}
+
+.delete-btn {
+  color: #f44336;
+}
+
+.delete-btn:hover {
+  color: #da190b;
+  background-color: rgba(244, 67, 54, 0.1);
 }
 
 .loading-message,
-.error-message,
 .no-recipes-message {
-  padding: 40px 20px;
   text-align: center;
-  font-size: 16px;
-}
-
-.loading-message {
+  padding: 40px;
   color: #666;
-}
-
-.error-message {
-  color: #e74c3c;
-  background-color: #fdf2f2;
-  border: 1px solid #f5c6cb;
-  border-radius: 8px;
-}
-
-.no-recipes-message {
-  color: #666;
-  background-color: #f8f9fa;
-  border: 1px solid #dee2e6;
-  border-radius: 8px;
+  font-size: 18px;
 }
 
 /* Responsive design */
@@ -118,6 +278,16 @@
 
   .recipe-title {
     font-size: 16px;
+  }
+
+  .recipe-actions {
+    gap: 6px;
+  }
+
+  .action-btn {
+    width: 32px;
+    height: 32px;
+    font-size: 14px;
   }
 }
 

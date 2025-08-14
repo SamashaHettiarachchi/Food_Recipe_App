@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { API_BASE_URL } from "../config";
 import { useNavigate } from "react-router-dom";
 import "./AddRecipe.css";
 
@@ -18,7 +19,7 @@ const AddRecipe = () => {
   useEffect(() => {
     const token = localStorage.getItem("token");
     const user = localStorage.getItem("user");
-    
+
     if (!token || !user) {
       alert("Please log in to add a recipe");
       navigate("/");
@@ -59,11 +60,16 @@ const AddRecipe = () => {
     }
   };
 
-  const removeImage = () => {
+  const removeImage = (e) => {
+    e.preventDefault(); // Prevent any form submission
+    e.stopPropagation(); // Stop event bubbling
     setSelectedImage(null);
     setImagePreview(null);
     // Reset file input
-    document.getElementById("image").value = "";
+    const fileInput = document.getElementById("image");
+    if (fileInput) {
+      fileInput.value = "";
+    }
   };
 
   const handleSubmit = async (e) => {
@@ -103,9 +109,9 @@ const AddRecipe = () => {
         submitData.append("file", selectedImage);
       }
 
-      const response = await fetch("http://localhost:5000/api/recipe", {
+      const response = await fetch(`${API_BASE_URL}/api/recipe`, {
         method: "POST",
-        body: submitData,// Don't set Content-Type header for FormData
+        body: submitData, // Don't set Content-Type header for FormData
         headers: {
           authorization: `Bearer ${localStorage.getItem("token")}`,
         },
@@ -187,13 +193,15 @@ const AddRecipe = () => {
 
             {imagePreview && (
               <div className="image-preview">
-                <img src={imagePreview} alt="Recipe preview" />
+                <img src={imagePreview} alt="Recipe preview" loading="lazy" />
                 <button
                   type="button"
                   onClick={removeImage}
                   className="remove-image-btn"
+                  title="Remove image"
+                  aria-label="Remove recipe image"
                 >
-                  ✕ Remove
+                  ✕
                 </button>
               </div>
             )}
