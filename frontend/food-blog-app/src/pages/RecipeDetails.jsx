@@ -12,6 +12,7 @@ import {
   FaList,
 } from "react-icons/fa";
 import "./AddRecipe.css";
+import { useToast } from "../context/ToastContext";
 
 const RecipeDetails = () => {
   const loaderData = useLoaderData();
@@ -19,6 +20,7 @@ const RecipeDetails = () => {
   const initialRecipe = loaderData?.recipe || null;
   const [recipe, setRecipe] = useState(initialRecipe);
   const [favoriteLoading, setFavoriteLoading] = useState(false);
+  const { showToast } = useToast();
 
   const currentUser = useMemo(() => {
     try {
@@ -27,6 +29,20 @@ const RecipeDetails = () => {
     } catch {
       return null;
     }
+  }, []);
+
+  // Update currentUser when auth status changes elsewhere in the app
+  React.useEffect(() => {
+    const onAuthChange = () => {
+      try {
+        const stored = localStorage.getItem("user");
+        setRecipe((prev) => ({ ...prev })); // trigger re-render if needed
+      } catch (e) {
+        // ignore
+      }
+    };
+    window.addEventListener("authChange", onAuthChange);
+    return () => window.removeEventListener("authChange", onAuthChange);
   }, []);
 
   const getRecipeImage = (r) => {
@@ -58,7 +74,10 @@ const RecipeDetails = () => {
   const handleFavoriteToggle = async () => {
     if (!recipe || favoriteLoading) return;
     const token = localStorage.getItem("token");
-    if (!token) return alert("Please log in first");
+    if (!token) {
+      showToast("info", "Please log in first");
+      return;
+    }
     try {
       setFavoriteLoading(true);
       const fav = isFavorited(recipe);
@@ -94,7 +113,7 @@ const RecipeDetails = () => {
       }
     } catch (err) {
       console.error(err);
-      alert("Failed to update favorite");
+      showToast("error", "Failed to update favorite");
     } finally {
       setFavoriteLoading(false);
     }
@@ -106,8 +125,10 @@ const RecipeDetails = () => {
   };
 
   const handleDelete = async () => {
-    if (!recipe) return;
-    if (!window.confirm("Delete this recipe?")) return;
+  if (!recipe) return;
+  // simple confirm using toast + window.confirm fallback
+  const confirmed = window.confirm("Delete this recipe?");
+  if (!confirmed) return;
     try {
       const token = localStorage.getItem("token");
       await axios.delete(`${API_BASE_URL}/api/recipe/${recipe._id}`, {
@@ -116,7 +137,7 @@ const RecipeDetails = () => {
       navigate("/myRecipes");
     } catch (err) {
       console.error(err);
-      alert("Failed to delete recipe");
+      showToast("error", "Failed to delete recipe");
     }
   };
 

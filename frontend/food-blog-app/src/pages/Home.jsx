@@ -3,12 +3,14 @@ import { useNavigate } from "react-router-dom";
 import foodimg from "../assets/foodRecipe.jpg";
 import RecipeItems from "../components/RecipeItems";
 import InputForm from "../components/inputForm";
+import { useToast } from "../context/ToastContext";
 import Model from "../components/Model";
 import "./Home.css";
 
 function Home() {
   const navigate = useNavigate();
   const [isOpen, setIsOpen] = React.useState(false);
+  const { showToast } = useToast();
 
   // Check if user is logged in
   const isLoggedIn = () => {
@@ -22,8 +24,8 @@ function Home() {
     if (isLoggedIn()) {
       navigate("/addRecipe");
     } else {
-      // Show login popup if not logged in
-      alert("Please log in to share your recipe!");
+  // Show login popup if not logged in
+  showToast("info", "Please log in to share your recipe!");
       setIsOpen(true);
     }
   };

@@ -7,6 +7,7 @@ import EditRecipe from "./pages/EditRecipe";
 import RecipeDetails from "./pages/RecipeDetails";
 import MainNavigation from "./components/MainNavigation";
 import { AuthProvider } from "./context/AuthContext";
+import { ToastProvider } from "./context/ToastContext";
 import axios from "axios";
 import { API_BASE_URL } from "./config";
 
@@ -125,7 +126,9 @@ const router = createBrowserRouter([
 export default function App() {
   return (
     <AuthProvider>
-      <RouterProvider router={router} fallbackElement={<LoadingSpinner />} />
+      <ToastProvider>
+        <RouterProvider router={router} fallbackElement={<LoadingSpinner />} />
+      </ToastProvider>
       <style>{`
         @keyframes spin {
           0% { transform: rotate(0deg); }

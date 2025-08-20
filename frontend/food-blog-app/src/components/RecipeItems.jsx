@@ -6,6 +6,7 @@ import foodImg from "../assets/foodRecipe.jpg";
 import { BsFillStopwatchFill } from "react-icons/bs";
 import { FaHeart, FaRegHeart, FaEdit, FaTrash } from "react-icons/fa";
 import "./RecipeItems.css";
+import { useToast } from "../context/ToastContext";
 
 const RecipeItems = () => {
   const loaderData = useLoaderData();
@@ -15,6 +16,7 @@ const RecipeItems = () => {
   const [loading, setLoading] = useState(false);
   const [currentUser, setCurrentUser] = useState(null);
   const [favoriteLoading, setFavoriteLoading] = useState({});
+  const { showToast } = useToast();
 
   // Function to refresh recipes data
   const refreshRecipes = async () => {
@@ -71,7 +73,7 @@ const RecipeItems = () => {
     const needsAuth =
       location.pathname === "/myRecipes" || location.pathname === "/favourite";
     if (needsAuth && !localStorage.getItem("user")) {
-      alert("Please log in to view this page");
+      showToast("info", "Please log in to view this page");
       window.location.href = "/";
       return;
     }
@@ -125,24 +127,18 @@ const RecipeItems = () => {
 
   const handleFavoriteToggle = async (recipeId) => {
     if (!isLoggedIn()) {
-      alert("Please log in to add favorites");
+      showToast("info", "Please log in to add favorites");
       return;
     }
 
     // Prevent multiple clicks
-    if (favoriteLoading[recipeId]) {
-      return;
-    }
+    if (favoriteLoading[recipeId]) return;
 
     try {
-      // Set loading state for this specific recipe
       setFavoriteLoading((prev) => ({ ...prev, [recipeId]: true }));
-
       const token = localStorage.getItem("token");
-
-      // Check if token exists
       if (!token) {
-        alert("No authentication token found. Please log in again.");
+        showToast("info", "No authentication token found. Please log in again.");
         return;
       }
 
@@ -150,109 +146,37 @@ const RecipeItems = () => {
       const isFav = isFavorited(recipe);
 
       if (isFav) {
-        // Remove from favorites
         await axios.delete(`${API_BASE_URL}/api/recipe/${recipeId}/favorite`, {
           headers: { Authorization: `Bearer ${token}` },
         });
       } else {
-        // Add to favorites
-        await axios.post(
-          `${API_BASE_URL}/api/recipe/${recipeId}/favorite`,
-          {},
-          {
-            headers: { Authorization: `Bearer ${token}` },
-          }
-        );
+        await axios.post(`${API_BASE_URL}/api/recipe/${recipeId}/favorite`, {}, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
       }
 
-      // Update local state - use string comparison for consistency
-      setRecipes(
-        recipes.map((recipe) => {
-          if (recipe._id === recipeId) {
-            if (isFav) {
-              // Remove from favorites - filter out the current user's ID
-              const updatedFavorites = recipe.favorites.filter(
-                (id) =>
-                  id.toString() !==
-                  (currentUser._id || currentUser.id).toString()
-              );
-
-              return {
-                ...recipe,
-                favorites: updatedFavorites,
-              };
-            } else {
-              // Add to favorites
-              const updatedFavorites = [
-                ...(recipe.favorites || []),
-                currentUser._id || currentUser.id,
-              ];
-
-              return {
-                ...recipe,
-                favorites: updatedFavorites,
-              };
-            }
-          }
-          return recipe;
-        })
+      // Update local state
+      setRecipes((prev) =>
+        prev.map((r) =>
+          r._id === recipeId
+            ? {
+                ...r,
+                favorites: isFav
+                  ? (r.favorites || []).filter(
+                      (id) => id.toString() !== (currentUser._id || currentUser.id).toString()
+                    )
+                  : [...(r.favorites || []), currentUser._id || currentUser.id],
+              }
+            : r
+        )
       );
 
-      // Show success message
-      const message = isFav
-        ? "Recipe removed from favorites!"
-        : "Recipe added to favorites!";
-
-      // Use a more subtle notification instead of alert
-      const notification = document.createElement("div");
-      notification.className = "favorite-notification";
-      notification.textContent = message;
-      notification.style.cssText = `
-        position: fixed;
-        top: 20px;
-        right: 20px;
-        background: ${isFav ? "#ff6b6b" : "#4caf50"};
-        color: white;
-        padding: 12px 20px;
-        border-radius: 8px;
-        box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-        z-index: 1000;
-        font-size: 14px;
-        font-weight: 500;
-        animation: slideIn 0.3s ease;
-      `;
-
-      document.body.appendChild(notification);
-
-      // Remove notification after 3 seconds
-      setTimeout(() => {
-        if (notification.parentNode) {
-          notification.parentNode.removeChild(notification);
-        }
-      }, 3000);
-
-      // Refresh recipes data to ensure UI is in sync with backend
-      setTimeout(() => {
-        refreshRecipes();
-      }, 500);
+      showToast(isFav ? "info" : "success", isFav ? "Recipe removed from favorites!" : "Recipe added to favorites!");
+      setTimeout(() => refreshRecipes(), 500);
     } catch (error) {
       console.error("Error toggling favorite:", error);
-
-      // Show more detailed error information
-      if (error.response) {
-        console.error("Backend error response:", error.response.data);
-        alert(
-          `Error: ${error.response.data.message || "Unknown error occurred"}`
-        );
-      } else if (error.request) {
-        console.error("No response received:", error.request);
-        alert("No response from server. Is the backend running?");
-      } else {
-        console.error("Request setup error:", error.message);
-        alert(`Request error: ${error.message}`);
-      }
+      showToast("error", error.response?.data?.message || "Failed to update favorite");
     } finally {
-      // Reset loading state for this recipe
       setFavoriteLoading((prev) => ({ ...prev, [recipeId]: false }));
     }
   };
@@ -262,22 +186,18 @@ const RecipeItems = () => {
   };
 
   const handleDelete = async (recipeId) => {
-    if (!window.confirm("Are you sure you want to delete this recipe?")) {
-      return;
-    }
-
+    if (!window.confirm("Are you sure you want to delete this recipe?")) return;
     try {
       const token = localStorage.getItem("token");
       await axios.delete(`${API_BASE_URL}/api/recipe/${recipeId}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
-
       // Remove from local state
-      setRecipes(recipes.filter((recipe) => recipe._id !== recipeId));
-      alert("Recipe deleted successfully!");
+      setRecipes((prev) => prev.filter((r) => r._id !== recipeId));
+      showToast("success", "Recipe deleted successfully!");
     } catch (error) {
       console.error("Error deleting recipe:", error);
-      alert("Error deleting recipe");
+      showToast("error", "Error deleting recipe");
     }
   };
 

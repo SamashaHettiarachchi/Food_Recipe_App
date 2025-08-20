@@ -5,6 +5,7 @@ import { Link } from "react-router-dom";
 import Model from "./Model";
 import InputForm from "./inputForm";
 import { useAuth } from "../context/AuthContext";
+import { useToast } from "../context/ToastContext";
 import {
   FaBars,
   FaTimes,
@@ -18,6 +19,7 @@ const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const { isLoggedIn, user, logout } = useAuth();
+  const { showToast } = useToast();
 
   // Debug logging
   console.log("Navbar render - isLoggedIn:", isLoggedIn, "user:", user);
@@ -28,7 +30,7 @@ const Navbar = () => {
 
   const handleLogout = () => {
     logout();
-    alert("Logged out successfully!");
+  showToast("success", "Logged out successfully!");
     window.location.href = "/";
   };
 

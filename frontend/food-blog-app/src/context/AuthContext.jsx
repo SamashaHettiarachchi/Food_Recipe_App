@@ -48,6 +48,13 @@ export const AuthProvider = ({ children }) => {
       "AuthContext state updated - isLoggedIn: true, user:",
       userData
     );
+    // Notify other parts of the app (and components that read localStorage)
+    // so they can update immediately without a full page refresh.
+    try {
+      window.dispatchEvent(new Event("authChange"));
+    } catch (e) {
+      console.warn("Could not dispatch authChange event", e);
+    }
   };
 
   const logout = () => {
@@ -55,6 +62,11 @@ export const AuthProvider = ({ children }) => {
     localStorage.removeItem("user");
     setIsLoggedIn(false);
     setUser(null);
+    try {
+      window.dispatchEvent(new Event("authChange"));
+    } catch (e) {
+      console.warn("Could not dispatch authChange event", e);
+    }
   };
 
   useEffect(() => {

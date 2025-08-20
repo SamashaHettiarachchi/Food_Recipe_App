@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { API_BASE_URL } from "../config";
 import { useNavigate } from "react-router-dom";
 import "./AddRecipe.css";
+import { useToast } from "../context/ToastContext";
 
 const AddRecipe = () => {
   const navigate = useNavigate();
@@ -14,6 +15,7 @@ const AddRecipe = () => {
   const [selectedImage, setSelectedImage] = useState(null);
   const [imagePreview, setImagePreview] = useState(null);
   const [loading, setLoading] = useState(false);
+  const { showToast } = useToast();
 
   // Check authentication on component mount
   useEffect(() => {
@@ -21,7 +23,7 @@ const AddRecipe = () => {
     const user = localStorage.getItem("user");
 
     if (!token || !user) {
-      alert("Please log in to add a recipe");
+      showToast("info", "Please log in to add a recipe");
       navigate("/");
     }
   }, [navigate]);
@@ -39,13 +41,13 @@ const AddRecipe = () => {
     if (file) {
       // Validate file type
       if (!file.type.startsWith("image/")) {
-        alert("Please select an image file");
+  showToast("error", "Please select an image file");
         return;
       }
 
       // Validate file size (5MB limit)
       if (file.size > 5 * 1024 * 1024) {
-        alert("File size must be less than 5MB");
+  showToast("error", "File size must be less than 5MB");
         return;
       }
 
@@ -83,7 +85,8 @@ const AddRecipe = () => {
         !formData.ingredients.trim() ||
         !formData.instructions.trim()
       ) {
-        alert(
+        showToast(
+          "error",
           "Please fill in all required fields (Title, Ingredients, Instructions)"
         );
         setLoading(false);
@@ -119,16 +122,16 @@ const AddRecipe = () => {
 
       if (response.ok) {
         const result = await response.json();
-        alert("Recipe added successfully!");
+        showToast("success", "Recipe added successfully!");
         console.log("Recipe created:", result);
         navigate("/");
       } else {
         const error = await response.json();
-        alert(error.message || "Failed to add recipe");
+        showToast("error", error.message || "Failed to add recipe");
       }
     } catch (error) {
       console.error("Error adding recipe:", error);
-      alert("Failed to add recipe. Please try again.");
+      showToast("error", "Failed to add recipe. Please try again.");
     } finally {
       setLoading(false);
     }

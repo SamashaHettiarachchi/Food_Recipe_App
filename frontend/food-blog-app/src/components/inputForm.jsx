@@ -3,6 +3,7 @@ import "./InputForm.css";
 import axios from "axios";
 import { API_BASE_URL } from "../config";
 import { useAuth } from "../context/AuthContext";
+import { useToast } from "../context/ToastContext";
 
 function InputForm({ setIsOpen }) {
   const { login } = useAuth();
@@ -10,6 +11,7 @@ function InputForm({ setIsOpen }) {
   const [password, setPassword] = React.useState("");
   const [isSignUp, setIsSignUp] = React.useState(false);
   const [error, setError] = React.useState("");
+  const { showToast } = useToast();
 
   // Debug logging
   console.log("InputForm rendered - email:", email, "password:", password);
@@ -69,7 +71,7 @@ function InputForm({ setIsOpen }) {
         });
       }
 
-      alert(isSignUp ? "Account created successfully!" : "Login successful!");
+  showToast("success", isSignUp ? "Account created successfully!" : "Login successful!");
 
       // Clear form fields
       setEmail("");
@@ -81,8 +83,9 @@ function InputForm({ setIsOpen }) {
       }
     } catch (error) {
       console.error("Error:", error);
-      const errorMessage = error.response?.data?.message || "An error occurred";
-      setError(errorMessage);
+  const errorMessage = error.response?.data?.message || "An error occurred";
+  setError(errorMessage);
+  showToast("error", errorMessage);
     }
   };
 
