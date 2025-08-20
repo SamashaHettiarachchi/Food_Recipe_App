@@ -30,7 +30,7 @@ const Navbar = () => {
 
   const handleLogout = () => {
     logout();
-  showToast("success", "Logged out successfully!");
+    showToast("success", "Logged out successfully!");
     window.location.href = "/";
   };
 

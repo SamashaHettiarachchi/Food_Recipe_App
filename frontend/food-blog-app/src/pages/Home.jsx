@@ -24,8 +24,8 @@ function Home() {
     if (isLoggedIn()) {
       navigate("/addRecipe");
     } else {
-  // Show login popup if not logged in
-  showToast("info", "Please log in to share your recipe!");
+      // Show login popup if not logged in
+      showToast("info", "Please log in to share your recipe!");
       setIsOpen(true);
     }
   };

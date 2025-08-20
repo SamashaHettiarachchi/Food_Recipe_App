@@ -71,7 +71,10 @@ function InputForm({ setIsOpen }) {
         });
       }
 
-  showToast("success", isSignUp ? "Account created successfully!" : "Login successful!");
+      showToast(
+        "success",
+        isSignUp ? "Account created successfully!" : "Login successful!"
+      );
 
       // Clear form fields
       setEmail("");
@@ -83,9 +86,9 @@ function InputForm({ setIsOpen }) {
       }
     } catch (error) {
       console.error("Error:", error);
-  const errorMessage = error.response?.data?.message || "An error occurred";
-  setError(errorMessage);
-  showToast("error", errorMessage);
+      const errorMessage = error.response?.data?.message || "An error occurred";
+      setError(errorMessage);
+      showToast("error", errorMessage);
     }
   };
 

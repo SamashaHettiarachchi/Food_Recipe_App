@@ -125,10 +125,10 @@ const RecipeDetails = () => {
   };
 
   const handleDelete = async () => {
-  if (!recipe) return;
-  // simple confirm using toast + window.confirm fallback
-  const confirmed = window.confirm("Delete this recipe?");
-  if (!confirmed) return;
+    if (!recipe) return;
+    // simple confirm using toast + window.confirm fallback
+    const confirmed = window.confirm("Delete this recipe?");
+    if (!confirmed) return;
     try {
       const token = localStorage.getItem("token");
       await axios.delete(`${API_BASE_URL}/api/recipe/${recipe._id}`, {

@@ -41,13 +41,13 @@ const AddRecipe = () => {
     if (file) {
       // Validate file type
       if (!file.type.startsWith("image/")) {
-  showToast("error", "Please select an image file");
+        showToast("error", "Please select an image file");
         return;
       }
 
       // Validate file size (5MB limit)
       if (file.size > 5 * 1024 * 1024) {
-  showToast("error", "File size must be less than 5MB");
+        showToast("error", "File size must be less than 5MB");
         return;
       }
 

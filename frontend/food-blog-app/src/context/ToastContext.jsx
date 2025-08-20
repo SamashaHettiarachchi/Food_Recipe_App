@@ -10,11 +10,14 @@ export const ToastProvider = ({ children }) => {
     setToasts((t) => t.filter((x) => x.id !== id));
   }, []);
 
-  const showToast = useCallback((type, message, duration = 3000) => {
-    const id = Date.now() + Math.random();
-    setToasts((t) => [...t, { id, type, message }]);
-    setTimeout(() => removeToast(id), duration);
-  }, [removeToast]);
+  const showToast = useCallback(
+    (type, message, duration = 3000) => {
+      const id = Date.now() + Math.random();
+      setToasts((t) => [...t, { id, type, message }]);
+      setTimeout(() => removeToast(id), duration);
+    },
+    [removeToast]
+  );
 
   return (
     <ToastContext.Provider value={{ showToast }}>

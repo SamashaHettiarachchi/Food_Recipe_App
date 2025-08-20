@@ -138,7 +138,10 @@ const RecipeItems = () => {
       setFavoriteLoading((prev) => ({ ...prev, [recipeId]: true }));
       const token = localStorage.getItem("token");
       if (!token) {
-        showToast("info", "No authentication token found. Please log in again.");
+        showToast(
+          "info",
+          "No authentication token found. Please log in again."
+        );
         return;
       }
 
@@ -150,9 +153,13 @@ const RecipeItems = () => {
           headers: { Authorization: `Bearer ${token}` },
         });
       } else {
-        await axios.post(`${API_BASE_URL}/api/recipe/${recipeId}/favorite`, {}, {
-          headers: { Authorization: `Bearer ${token}` },
-        });
+        await axios.post(
+          `${API_BASE_URL}/api/recipe/${recipeId}/favorite`,
+          {},
+          {
+            headers: { Authorization: `Bearer ${token}` },
+          }
+        );
       }
 
       // Update local state
@@ -163,7 +170,9 @@ const RecipeItems = () => {
                 ...r,
                 favorites: isFav
                   ? (r.favorites || []).filter(
-                      (id) => id.toString() !== (currentUser._id || currentUser.id).toString()
+                      (id) =>
+                        id.toString() !==
+                        (currentUser._id || currentUser.id).toString()
                     )
                   : [...(r.favorites || []), currentUser._id || currentUser.id],
               }
@@ -171,11 +180,17 @@ const RecipeItems = () => {
         )
       );
 
-      showToast(isFav ? "info" : "success", isFav ? "Recipe removed from favorites!" : "Recipe added to favorites!");
+      showToast(
+        isFav ? "info" : "success",
+        isFav ? "Recipe removed from favorites!" : "Recipe added to favorites!"
+      );
       setTimeout(() => refreshRecipes(), 500);
     } catch (error) {
       console.error("Error toggling favorite:", error);
-      showToast("error", error.response?.data?.message || "Failed to update favorite");
+      showToast(
+        "error",
+        error.response?.data?.message || "Failed to update favorite"
+      );
     } finally {
       setFavoriteLoading((prev) => ({ ...prev, [recipeId]: false }));
     }
