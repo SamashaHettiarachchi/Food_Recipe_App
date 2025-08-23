@@ -7,6 +7,7 @@
 3. Create a new **Web Service**
 4. Select this repository: `Food_Recipe_App`
 5. Configure:
+
    - **Name**: `food-recipe-backend` (or any name)
    - **Branch**: `main`
    - **Root Directory**: `backend`
@@ -15,6 +16,7 @@
    - **Start Command**: `node server.js`
 
 6. **Environment Variables** (add these in Render dashboard):
+
    ```
    MONGO_URI=your_mongodb_connection_string
    JWT_SECRET=your_jwt_secret_key
@@ -40,10 +42,11 @@
 ## Environment Variables You Need
 
 From your old Railway dashboard, copy these values:
+
 - `MONGO_URI` - your MongoDB connection string
 - `JWT_SECRET` - your JWT signing key
 - `CLOUDINARY_CLOUD_NAME` - from Cloudinary dashboard
-- `CLOUDINARY_API_KEY` - from Cloudinary dashboard  
+- `CLOUDINARY_API_KEY` - from Cloudinary dashboard
 - `CLOUDINARY_API_SECRET` - from Cloudinary dashboard
 
 Set `CLIENT_URL=https://food-recipe-app-mu-two.vercel.app` (your Vercel frontend URL)
