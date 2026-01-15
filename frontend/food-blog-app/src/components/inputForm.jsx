@@ -135,8 +135,11 @@ function InputForm({ setIsOpen }) {
             id="input"
             className="input"
             placeholder="Enter the input"
-            value={password}
+            value={input}
             required
+            onChange={handlePasswordChange}
+            onClick={() => console.log("Password input clicked")}
+            onFocus={() => console.log("Password input focused")}
           
           />
         </div>
