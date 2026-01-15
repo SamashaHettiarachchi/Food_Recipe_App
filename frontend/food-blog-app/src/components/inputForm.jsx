@@ -127,6 +127,19 @@ function InputForm({ setIsOpen }) {
             onFocus={() => console.log("Password input focused")}
           />
         </div>
+     
+        <div>
+          <label>Input</label>
+          <input
+          type="input"
+            id="input"
+            className="input"
+            placeholder="Enter the input"
+            value={password}
+            required
+          
+          />
+        </div>
         <button type="submit">{isSignUp ? "Sign Up" : "Login"}</button>
         <p onClick={() => setIsSignUp((prev) => !prev)}>
           {isSignUp
